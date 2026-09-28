@@ -97,8 +97,10 @@ table.t tr:hover td{background:#EEF3F7}
 @media (pointer:coarse){.navbtn{padding:10px 14px;font-size:14px}.count{gap:8px;right:10px;bottom:10px}.help{display:none}}
 @media (max-width:900px){.help{display:none}.count{font-size:12px}}
 body.nofs #fullBtn{display:none}
-body.portrait .count{left:0;right:0;bottom:8px;justify-content:center;flex-wrap:wrap}
+body.portrait .count{left:0;right:0;bottom:calc(8px + env(safe-area-inset-bottom,0px));justify-content:center;flex-wrap:nowrap;gap:6px}
+@media (max-width:520px){.count .navbtn{padding:10px 12px;font-size:16px}.count{bottom:calc(8px + env(safe-area-inset-bottom,0px))}}
 body.portrait #playPos{display:none!important}
+@media (max-width:520px){#fullBtn{position:fixed;right:10px;top:calc(10px + env(safe-area-inset-top,0px));z-index:10}}
 </style>
 </head>
 <body>
@@ -1644,20 +1646,20 @@ let gpaused=false;
 let manual=0;
 const wait=(ms)=>{const m=manual>0;return new Promise(r=>{const t=setTimeout(()=>{const chk=()=>{if(!gpaused||m)r();else{const t2=setTimeout(chk,120);timers.push(t2)}};chk()},ms*SPEED);timers.push(t)})};
 async function manualRun(fn){manual++;try{await fn()}finally{manual--}}
-function setPauseBtn(){const b=document.getElementById('playBtn');if(!b)return;const on=player?null:gpaused;b.textContent=(player?player.isPaused():gpaused)?'▶ 動きを再生':'⏸ 動きを止める'}
+const narrow=()=>innerWidth<520;
+function setPauseBtn(){const b=document.getElementById('playBtn');if(!b)return;const p=(player?player.isPaused():gpaused);b.textContent=narrow()?(p?'▶ 再生':'⏸ 止める'):(p?'▶ 動きを再生':'⏸ 動きを止める')}
 function togglePause(){gpaused=!gpaused;document.getAnimations().forEach(a=>gpaused?a.pause():a.play());setPauseBtn()}
 const clearTimers=()=>{timers.forEach(clearTimeout);timers=[]};
 
 function fit(){const portrait=innerHeight>innerWidth&&innerWidth<900;document.body.classList.toggle('portrait',portrait);
-  const small=!portrait&&innerHeight<520;const s=portrait?Math.min(innerHeight/1280,innerWidth/720)*0.98:small?Math.min(innerWidth/1280,(innerHeight-56)/720)*0.98:Math.min(innerWidth/1280,innerHeight/720)*0.96;
-  slides.forEach(el=>el.style.transform=portrait?`rotate(90deg) scale(${s})`:small?`translateY(-26px) scale(${s})`:`scale(${s})`)}
-addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,200));fit();
-// スマホ：スワイプでページ送り（横：左→次、右→前／縦持ち（回転表示）のときは 上→次、下→前）
+  const small=!portrait&&innerHeight<520;const s=portrait?Math.min(innerWidth/1280,(innerHeight-120)/720)*0.99:small?Math.min(innerWidth/1280,(innerHeight-56)/720)*0.98:Math.min(innerWidth/1280,innerHeight/720)*0.96;
+  slides.forEach(el=>el.style.transform=small?`translateY(-26px) scale(${s})`:`scale(${s})`)}
+function navLabels(){const n=narrow();document.getElementById('prevBtn').textContent=n?'←':'← 前へ';document.getElementById('nextBtn').textContent=n?'→':'次へ →';document.getElementById('fullBtn').textContent=n?'⛶':'⛶ 全画面';setPauseBtn()}
+addEventListener('resize',()=>{fit();navLabels()});addEventListener('orientationchange',()=>setTimeout(()=>{fit();navLabels()},200));fit();setTimeout(navLabels,0);
+// スマホ：スワイプでページ送り（左→次、右→前）
 (()=>{let sx=0,sy=0,st=0;document.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now()},{passive:true});
   document.addEventListener('touchend',e=>{if(['INPUT','TEXTAREA','SELECT','BUTTON'].includes((e.target||{}).tagName))return;const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Date.now()-st>800)return;
-    const portrait=document.body.classList.contains('portrait');
-    if(portrait){if(Math.abs(dy)>60&&Math.abs(dy)>Math.abs(dx)*1.5){dy<0?advance():prev()}}
-    else{if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?advance():prev()}}},{passive:true})})();
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?advance():prev()}},{passive:true})})();
 
 function frags(s){return [...s.querySelectorAll('.frag')]}
 function show(i,fromBack=false){
@@ -1731,7 +1733,7 @@ function openNotes(){if(notesWin&&!notesWin.closed){notesWin.focus();pushNotes()
 function toggleFull(){const d=document,el=d.documentElement;const fs=d.fullscreenElement||d.webkitFullscreenElement;
   try{if(fs){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el);if(r&&r.catch)r.catch(()=>{})}}catch(err){}}
 document.getElementById('fullBtn').onclick=e=>{e.stopPropagation();toggleFull()};
-if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled))document.getElementById('fullBtn').style.display='none'; // iPhone の Safari など全画面 API が無い環境では非表示
+if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)){const fb=document.getElementById('fullBtn');fb.onclick=e=>{e.stopPropagation();alert('この端末のブラウザでは Web ページの全画面表示ができません。\niPhone の Safari では、下の共有ボタン → 「ホーム画面に追加」で開くと、アドレスバーなしの全画面で見られます。')}}
 if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled))document.body.classList.add('nofs');
 
 
