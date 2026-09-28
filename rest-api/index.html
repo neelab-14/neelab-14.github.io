@@ -95,7 +95,8 @@ table.t tr:hover td{background:#EEF3F7}
 
 /* スマホ向け */
 @media (pointer:coarse){.navbtn{padding:10px 14px;font-size:14px}.count{gap:8px;right:10px;bottom:10px}.help{display:none}}
-@media (max-width:900px){.help{display:none}.count{font-size:12px}#fullBtn{display:none}}
+@media (max-width:900px){.help{display:none}.count{font-size:12px}}
+body.nofs #fullBtn{display:none}
 body.portrait .count{left:0;right:0;bottom:8px;justify-content:center;flex-wrap:wrap}
 body.portrait #playPos{display:none!important}
 </style>
@@ -1730,6 +1731,8 @@ function openNotes(){if(notesWin&&!notesWin.closed){notesWin.focus();pushNotes()
 function toggleFull(){const d=document,el=d.documentElement;const fs=d.fullscreenElement||d.webkitFullscreenElement;
   try{if(fs){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el);if(r&&r.catch)r.catch(()=>{})}}catch(err){}}
 document.getElementById('fullBtn').onclick=e=>{e.stopPropagation();toggleFull()};
+if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled))document.getElementById('fullBtn').style.display='none'; // iPhone の Safari など全画面 API が無い環境では非表示
+if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled))document.body.classList.add('nofs');
 
 
 document.querySelectorAll('.rev').forEach(r=>{r.addEventListener('click',()=>r.classList.toggle('open'));r.addEventListener('keydown',e=>{if(e.key==='Enter')r.classList.toggle('open')})});
