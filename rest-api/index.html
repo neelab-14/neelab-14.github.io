@@ -817,12 +817,12 @@ todaySky.textContent = <span class="cs-code" data-f="tsky">d.today.sky</span>;
   <div class="head"><div><h2>REST の一言定義</h2><p class="sub">REpresentational State Transfer ── Roy Fielding が 2000 年に名付けた。4 つの言葉に分けて読む</p></div></div>
   <div class="stage">
     <div style="position:relative;height:474px">
-      <p style="font-size:34px;font-weight:800;line-height:1.5;margin:0">
+      <p style="font-size:29px;font-weight:800;line-height:1.45;margin:0">
         <span class="df" style="background:var(--put-l);padding:2px 10px;border-radius:8px;transition:box-shadow .3s,opacity .3s">Web の仕組み（HTTP・URL）</span>をそのまま活かして、<br>
         <span class="df" style="background:var(--get-l);padding:2px 10px;border-radius:8px;transition:box-shadow .3s,opacity .3s">リソース（モノ）</span>を<span class="df" style="background:var(--post-l);padding:2px 10px;border-radius:8px;transition:box-shadow .3s,opacity .3s">HTTP メソッド</span>で操作する、<span class="df" style="background:var(--patch-l);padding:2px 10px;border-radius:8px;transition:box-shadow .3s,opacity .3s">設計の考え方</span>
       </p>
-      <div id="df-ill" class="box" style="position:absolute;left:0;top:136px;width:700px;height:262px;padding:12px 18px;overflow:hidden"></div>
-      <div class="box" style="position:absolute;right:0;top:136px;width:410px;height:262px;padding:12px 18px">
+      <div id="df-ill" class="box" style="position:absolute;left:0;top:118px;width:700px;height:282px;padding:10px 16px;overflow:hidden"></div>
+      <div class="box" style="position:absolute;right:0;top:118px;width:410px;height:282px;padding:12px 18px">
         <div style="font-size:13px;color:var(--ink-3)">REST は「ルール」ではなく「お作法」</div>
         <div style="margin-top:8px;display:grid;gap:8px;font-size:14px;line-height:1.5">
           <div class="box" style="padding:8px 12px;border-left:5px solid var(--del)"><b>ルール</b>：守らないと動かない<br><span style="color:var(--ink-2)">HTTP の書式、JSON の文法。1 文字違えばエラー</span></div>
@@ -2167,24 +2167,36 @@ inits.stateless=s=>{
 const DF=[`<div style="font-size:13px;color:var(--ink-3)">Web の仕組みをそのまま使う</div><div style="display:flex;gap:16px;align-items:center;margin-top:12px"><div class="node" style="width:120px;height:80px;background:var(--ink-2);font-size:14px">ブラウザ</div><div style="flex:1;text-align:center"><div class="mono" style="font-size:15px;color:var(--put)">GET https://api.example.com/users/42</div><div style="border-top:2px dashed var(--rule);margin:8px 0"></div><div style="font-size:13px;color:var(--ink-3)">HTTP でお願い、URL で場所を指す ── いつも Web ページを見るときと同じ道具</div></div><div class="node" style="width:120px;height:80px;background:var(--get);font-size:14px">サーバー</div></div><p style="margin-top:14px;font-size:14px;color:var(--ink-2);line-height:1.5">新しい通信手順を発明しない。ブラウザが 30 年使ってきた HTTP と URL を、API にもそのまま使う。だからキャッシュも、負荷分散も、既存の道具がそのまま効く</p>`,
 `<div style="font-size:13px;color:var(--ink-3)">リソース ＝ URL で指せる「モノ」</div><div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><div class="box" style="padding:10px 14px;font-size:14px"><b>ユーザー</b><br><span class="mono" style="color:var(--put);font-size:13px">/users/42</span></div><div class="box" style="padding:10px 14px;font-size:14px"><b>注文</b><br><span class="mono" style="color:var(--put);font-size:13px">/orders/1001</span></div><div class="box" style="padding:10px 14px;font-size:14px"><b>42 番の注文一覧</b><br><span class="mono" style="color:var(--put);font-size:13px">/users/42/orders</span></div><div class="box" style="padding:10px 14px;font-size:14px"><b>コメント</b><br><span class="mono" style="color:var(--put);font-size:13px">/posts/7/comments/3</span></div></div><p style="margin-top:14px;font-size:14px;color:var(--ink-2);line-height:1.5">「操作」ではなく「モノ」を中心に考える。URL に書くのはモノの名前だけ（名詞）。何をするかは URL に書かない</p>`,
 `<div style="font-size:13px;color:var(--ink-3)">HTTP メソッド ＝ そのモノに「何をするか」</div><div style="display:flex;gap:10px;align-items:center;margin-top:12px;font-size:22px"><span class="k GET">GET</span><span class="k POST">POST</span><span class="k PUT">PUT</span><span class="k PATCH">PATCH</span><span class="k DELETE">DELETE</span><span style="font-size:15px;color:var(--ink-3);margin-left:8px">× <span class="mono" style="color:var(--put)">/users/42</span></span></div><p style="margin-top:14px;font-size:14px;color:var(--ink-2);line-height:1.5">同じ /users/42 でも、GET なら読む、PATCH なら一部を変える、DELETE なら消す。「モノ × 動詞」の組み合わせで、すべての操作を表す。動詞は HTTP が最初から持っている 5 つで足りる</p>`,
-`<div style="font-size:12px;color:var(--ink-3)">「ルール」と「お作法」── 破ったとき何が起きるか</div>
-<div style="display:grid;grid-template-columns:104px 1fr 1fr;gap:6px 10px;margin-top:6px;font-size:12.5px;align-items:stretch">
-  <div></div><div style="text-align:center;font-size:12px;color:var(--del);font-weight:800">破った例</div><div style="text-align:center;font-size:12px;color:var(--get);font-weight:800">守った例</div>
-  <div style="display:flex;flex-direction:column;justify-content:center;font-weight:800;color:var(--del);white-space:nowrap">ルール<span style="font-size:11px;font-weight:500;color:var(--ink-3)">HTTP・JSON の書式</span></div>
-  <div class="code" style="padding:6px 10px;font-size:11px;line-height:1.4;white-space:pre-wrap"><span class="r">GEET /users/42</span>　<span class="c">← 綴りが違う</span><br><span class="r">{ "name": "Tanaka", }</span>　<span class="c">← 余計なカンマ</span><br>→ <b style="color:#FF8A80">400 エラー。動かない</b></div>
-  <div class="code" style="padding:6px 10px;font-size:11px;line-height:1.4;white-space:pre-wrap"><span class="g">GET /users/42</span><br><span class="g">{ "name": "Tanaka" }</span><br>→ <b style="color:#8FD3C7">200。動く</b></div>
-  <div style="display:flex;flex-direction:column;justify-content:center;font-weight:800;color:var(--get);white-space:nowrap">お作法<span style="font-size:11px;font-weight:500;color:var(--ink-3)">REST</span></div>
-  <div class="code" style="padding:6px 10px;font-size:11px;line-height:1.4;white-space:pre-wrap"><span class="y">POST /getUser?id=42</span>　<span class="c">← URL に動詞</span><br>→ <b style="color:#8FD3C7">200。動く</b><br><span class="c">でも次に見た人は「GET で取れないの？」と迷う</span></div>
-  <div class="code" style="padding:6px 10px;font-size:11px;line-height:1.4;white-space:pre-wrap"><span class="g">GET /users/42</span>　<span class="c">← モノ × 動詞</span><br>→ <b style="color:#8FD3C7">200。動く</b><br><span class="c">初めて見た人も /orders/7 は GET だと予想できる</span></div>
+`<div style="font-size:12px;color:var(--ink-3);line-height:1.4">GET や URL の書き方を決めているのは <b style="color:var(--del)">HTTP（ルール）</b>。<b style="color:var(--get)">REST（お作法）</b>は、その HTTP の道具を「どう使うか」。同じ「ユーザー 42 を読む」を、実際の文字列で比べる</div>
+<div style="display:grid;grid-template-columns:96px 1fr 1fr;gap:5px 8px;margin-top:6px;font-size:12px;align-items:stretch">
+  <div></div><div style="text-align:center;font-size:11.5px;color:var(--del);font-weight:800">破った文字列</div><div style="text-align:center;font-size:11.5px;color:var(--get);font-weight:800">守った文字列</div>
+  <div style="display:flex;flex-direction:column;justify-content:center;font-weight:800;color:var(--del);white-space:nowrap;line-height:1.3">ルール<span style="font-size:10.5px;font-weight:500;color:var(--ink-3)">HTTP の文法</span></div>
+  <div class="code" style="padding:4px 8px;font-size:10px;line-height:1.35;white-space:pre-wrap"><span class="r">GEET</span> /users/42 HTTP/1.1
+Host: api.example.com
+<span class="c">← メソッドは GET/POST/… だけ。GEET は文法違反</span>
+→ <b style="color:#FF8A80">400 Bad Request。サーバーが読めない</b></div>
+  <div class="code" style="padding:4px 8px;font-size:10px;line-height:1.35;white-space:pre-wrap"><span class="g">GET</span> /users/42 HTTP/1.1
+Host: api.example.com
+<span class="c">← 文法どおり</span>
+→ <b style="color:#8FD3C7">200 OK</b></div>
+  <div style="display:flex;flex-direction:column;justify-content:center;font-weight:800;color:var(--get);white-space:nowrap;line-height:1.3">お作法<span style="font-size:10.5px;font-weight:500;color:var(--ink-3)">REST</span></div>
+  <div class="code" style="padding:4px 8px;font-size:10px;line-height:1.35;white-space:pre-wrap"><span class="y">POST</span> <span class="y">/getUser?id=42</span> HTTP/1.1
+Host: api.example.com
+<span class="c">← 文法は正しく HTTP は受け付ける。でも読むのに POST、URL に動詞</span>
+→ <b style="color:#8FD3C7">200 OK。動く</b><span class="c">。でも読み手は「GET で取れないの？」と迷う</span></div>
+  <div class="code" style="padding:4px 8px;font-size:10px;line-height:1.35;white-space:pre-wrap"><span class="g">GET</span> <span class="g">/users/42</span> HTTP/1.1
+Host: api.example.com
+<span class="c">← 読むから GET、URL はモノ（名詞）</span>
+→ <b style="color:#8FD3C7">200 OK。動く</b><span class="c">。初見でも /orders/7 は GET だと予想できる</span></div>
 </div>
-<p style="margin-top:6px;font-size:12px;color:var(--ink-2);line-height:1.4">ルールを破ると<b>動かない</b>。お作法を破っても<b>動くが、分かりにくい</b>（赤信号無視は事故、ウインカーなしは走れるが周りが困る）。REST はお作法側。だから守り具合に幅があり、よく守っている API を「RESTful」と呼ぶ</p>`];
+<p style="margin-top:6px;font-size:12px;color:var(--ink-2);line-height:1.4">上の行は HTTP の話で、破ると<b>動かない</b>。下の行が REST の話で、破っても<b>動くが分かりにくい</b>。REST は「HTTP のルールの上で、どう使うかのお作法」。だから守り具合に幅があり、よく守っている API を RESTful と呼ぶ</p>`];
 inits.define=s=>{
   const ill=s.querySelector('#df-ill');
   stepCaptions(s,[...s.querySelectorAll('.df')],[
     '<b>Web の仕組み（HTTP・URL）</b>をそのまま活かす ── 新しい通信方式を作らず、ブラウザが Web ページを見るときと同じ HTTP と URL を API にも使う',
     '<b>リソース（モノ）</b> ── ユーザー、注文、コメントのような「URL で指せるモノ」。REST では操作ではなくモノを中心に考える',
     '<b>HTTP メソッド</b>で操作する ── そのモノを「読む・作る・置き換える・一部変える・消す」を GET / POST / PUT / PATCH / DELETE で表す',
-    '<b>設計の考え方</b> ── REST は「守らないと動かないルール」ではなく「守ると分かりやすくなるお作法」。だから守り具合は API ごとに違い、よく守っている API を「RESTful」と呼ぶ'],
+    '<b>設計の考え方</b> ── GET や URL の書式を決めているのは HTTP（守らないと動かないルール）。REST はその HTTP を「どう使うか」のお作法（守らなくても動くが、守ると分かりやすい）。だから守り具合は API ごとに違い、よく守っている API を「RESTful」と呼ぶ'],
     {color:k=>['var(--put)','var(--get)','var(--post)','var(--patch)'][k],msAll:5200,onStep:i=>{if(i>=0)ill.innerHTML=DF[i]}});
 };
 // six
